@@ -18,28 +18,16 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <BlynkSimpleEsp32.h>
+#include <HTTPClient.h>
 
 char auth[] = BLYNK_AUTH_TOKEN;
-
+String serverName = "https://sgp1.blynk.cloud/external/api/update?token=pjFg4XOFm09VZtyVWbHbevDj1lFrCkyQ&";
 // Your WiFi credentials.
 // Set password to "" for open networks.
 char ssid[] = "Hotspotify";
 char pass[] = "huhuhuhu";
 
-BlynkTimer timer;
 
-// This function is called every time the Virtual Pin 0 state changes
-
-// This function is called every time the device is connected to the Blynk.Cloud
-
-
-// This function sends Arduino's uptime every second to Virtual Pin 2.
-void myTimerEvent()
-{
-  // You can send any value at any time.
-  // Please don't send more that 10 values per second.
-  Blynk.virtualWrite(V0, millis() / 1000);
-}
 
 void setup()
 {
@@ -52,9 +40,6 @@ void setup()
   // You can also specify server:
   //Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
   //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
-
-  // Setup a function to be called every second
-  timer.setInterval(1000L, myTimerEvent);
 }
 
 BLYNK_WRITE(V3)

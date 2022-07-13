@@ -1,6 +1,10 @@
 #include <SpheroRVR.h>
+#include <Servo.h>
+
 static DriveControl driveControl;
 int item1, item2, item3, item4;
+int ServoPos = 0;
+Servo myservo;
 
 void setup() {
   // set up communication with the RVR
@@ -10,20 +14,18 @@ void setup() {
   pinMode(5, OUTPUT); 
   pinMode(6, OUTPUT);
   pinMode(13, OUTPUT);
+  myservo.attach(3);
+  myservo.write(0);              // tell servo to go to position in variable 'pos'
+
 } 
-
-void close_arm() {
-  analogWrite(5, 250);
-  delay(4500);
-  analogWrite(5, 0);
+void dropPackage(){
+   for (ServoPos = 0; ServoPos <= 130; ServoPos += 1) { // goes from 0 degrees to 180 degrees
+    myservo.write(ServoPos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }delay(1000);
+  myservo.write(0);
 }
 
-void open_arm() {
-  analogWrite(6, 250);
-  delay(3500);
-  analogWrite(6, 0);
-}
-  
 void loop() {
   rvr.resetYaw();
   if (digitalRead(A0) == 1) {
@@ -31,7 +33,7 @@ void loop() {
     driveControl.rollStart(0, 32);
     delay(1400);
     driveControl.rollStop(0);
-    close_arm();
+    dropPackage();
     driveControl.rollStart(180, -32);
     delay(1250);
     driveControl.rollStop(270);
@@ -39,7 +41,6 @@ void loop() {
     driveControl.rollStart(270, 48);
     delay(2000);
     driveControl.rollStop(270);
-    open_arm();
     driveControl.rollStart(90, -48);
     delay(1500);
     driveControl.rollStart(0,1);
@@ -55,7 +56,7 @@ void loop() {
     driveControl.rollStart(0, 32);
     delay(1800);
     driveControl.rollStop(0);
-    close_arm();
+    dropPackage();
     driveControl.rollStart(180, -32);
     delay(1650);
     int count = 2 ;
@@ -65,7 +66,6 @@ void loop() {
       count = count-1;
     }
     driveControl.rollStop(270);
-    open_arm();
     driveControl.rollStart(90, -48);
     delay(1500);
     driveControl.rollStop(0);

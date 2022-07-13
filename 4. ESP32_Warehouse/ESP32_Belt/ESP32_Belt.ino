@@ -32,50 +32,55 @@ void setup()
   // Debug console
   Serial.begin(115200);
   pinMode(2, OUTPUT);
-  pinMode(0, OUTPUT); 
+  pinMode(0, OUTPUT);
   pinMode(4, OUTPUT);
-  pinMode(32, INPUT); 
+  pinMode(32, INPUT);
   Blynk.begin(auth, ssid, pass);
   // You can also specify server:
   //Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
   //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
 }
 
-void HTTPRequestAPICalls(String VPin, String Value){
-    HTTPClient http;
-    http.begin((serverName + VPin+ "=" + Value).c_str());
-    int httpResponseCode = http.GET();
+void HTTPRequestAPICalls(String VPin, String Value) {
+  HTTPClient http;
+  http.begin((serverName + VPin + "=" + Value).c_str());
+  int httpResponseCode = http.GET();
 }
 
 BLYNK_WRITE(V1)
 {
   int pinValue1 = param.asInt(); // assigning incoming value from pin V1 to a variable
-  if (pinValue1 == 1){
-    digitalWrite(2, HIGH);   
-    while(digitalRead(32) != 1){
-      delay(100); 
+  if (pinValue1 == 1) {
+    digitalWrite(2, HIGH);
+    while (digitalRead(32) != 1) {
+      Serial.println(digitalRead(32));
+
+      delay(100);
     }
-    delay(1000); 
+    Serial.println(digitalRead(32));
+
+    delay(1000);
     digitalWrite(2, LOW);
-    Blynk.virtualWrite(V1,0);   
+    Blynk.virtualWrite(V1, 0);
     HTTPRequestAPICalls("V3", "1");
-  } 
+  }
 }
 
 BLYNK_WRITE(V2)
 {
   int pinValue2 = param.asInt(); // assigning incoming value from pin V1 to a variable
-  if (pinValue2 == 1){
-    digitalWrite(4, HIGH);   
-    delay(1000);                      
-    digitalWrite(4, LOW);
-    delay(1000); 
-    Blynk.virtualWrite(V2,0); 
-    Blynk.virtualWrite(V4,1); 
+  if (pinValue2 == 1) {
+    digitalWrite(0, HIGH);
+    while (digitalRead(32) != 1) {
+      delay(100);
+    }
+    delay(1000);
+    digitalWrite(0, LOW);
+    Blynk.virtualWrite(V1, 0);
+    HTTPRequestAPICalls("V3", "1");
   }
 }
 
-void loop()
-{
+void loop() {
   Blynk.run();
 }

@@ -58,9 +58,9 @@ BLYNK_WRITE(V4)
 {
   int pinValue2 = param.asInt(); // assigning incoming value from pin V1 to a variable
   if (pinValue2 == 1){
-    digitalWrite(4, HIGH);   
+    digitalWrite(0, HIGH);   
     delay(1000);                      
-    digitalWrite(4, LOW);
+    digitalWrite(0, LOW);
     delay(1000); 
     Blynk.virtualWrite(V4,0); 
   }

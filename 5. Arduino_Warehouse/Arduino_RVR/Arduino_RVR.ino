@@ -11,66 +11,54 @@ void setup() {
   rvr.configUART(&Serial);
   // get the RVR's DriveControl
   driveControl = rvr.getDriveControl();
-  pinMode(5, OUTPUT); 
+  pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(13, OUTPUT);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
   myservo.attach(3);
   myservo.write(0);              // tell servo to go to position in variable 'pos'
 
-} 
-void dropPackage(){
-   for (ServoPos = 0; ServoPos <= 130; ServoPos += 1) { // goes from 0 degrees to 180 degrees
-    myservo.write(ServoPos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }delay(1000);
-  myservo.write(0);
+}
+void dropPackage() {
+  for (ServoPos = 0; ServoPos <= 130; ServoPos += 1) { 
+    myservo.write(ServoPos);            
+    delay(15);                      
+  } delay(1000);
+  for (ServoPos = 0; ServoPos <= 130; ServoPos += 1) { 
+    myservo.write(130-ServoPos);            
+    delay(15);             
+  }
+}
+
+void roll(int direction, int speed, float time) {
+  driveControl.rollStart(direction, speed);
+  delay(time*1000);
+  driveControl.rollStop(direction);
+  delay(250);
 }
 
 void loop() {
   rvr.resetYaw();
   if (digitalRead(A0) == 1) {
-    digitalWrite(13,1);
-    driveControl.rollStart(0, 32);
-    delay(1400);
-    driveControl.rollStop(0);
+    digitalWrite(13, 1);
+    roll(0, 32, 2);
+    roll(270, 32, 2);
     dropPackage();
-    driveControl.rollStart(180, -32);
-    delay(1250);
-    driveControl.rollStop(270);
-    delay(500);
-    driveControl.rollStart(270, 48);
-    delay(2000);
-    driveControl.rollStop(270);
-    driveControl.rollStart(90, -48);
-    delay(1500);
-    driveControl.rollStart(0,1);
-    delay(1000);
-    digitalWrite(13,0);
+    roll(90, 32, 2);
+    roll(180, 32, 2);
+    driveControl.rollStop(0);
+    digitalWrite(13, 0);
 
-  }if (digitalRead(A2) == 1){
-    digitalWrite(13,1);
-    driveControl.rollStart(90, 48);
-    delay(1700);
-    driveControl.rollStop(0);
-    delay(500);
-    driveControl.rollStart(0, 32);
-    delay(1800);
-    driveControl.rollStop(0);
+  } if (digitalRead(A1) == 1) {
+    digitalWrite(13, 1);
+    roll(0, 32, 2);
+    roll(90, 32, 2);
     dropPackage();
-    driveControl.rollStart(180, -32);
-    delay(1650);
-    int count = 2 ;
-    while(count > 0 ){
-      driveControl.rollStart(270, 48);
-      delay(1200);
-      count = count-1;
-    }
-    driveControl.rollStop(270);
-    driveControl.rollStart(90, -48);
-    delay(1500);
+    roll(270, 32, 2);
+    roll(180, 32, 2);
     driveControl.rollStop(0);
-    driveControl.rollStart(0,1);
-    delay(1000);
-    digitalWrite(13,0);
+    digitalWrite(13, 0);
   }
 }

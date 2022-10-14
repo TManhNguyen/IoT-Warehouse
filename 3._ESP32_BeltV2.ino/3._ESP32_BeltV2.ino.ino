@@ -10,7 +10,6 @@ int pos = 0;    // variable to store the servo position
 // Recommended PWM GPIO pins on the ESP32 include 2,4,12-19,21-23,25-27,32-33
 int servoPinA = 18;
 int servoPinB = 19;
-
 int spd = 0;
 
 #define PIN_IN1  27 // ESP32 pin GIOP27 connected to the IN1 pin L298N
@@ -30,6 +29,7 @@ char auth[] = "h5xLM0vLqZL3OBgSC8VMFDnUy73VFoKa";
 // Set password to "" for open networks.
 char ssid[] = "Hotspotify";
 char pass[] = "huhuhuhu";
+int speed_motor = 250;
 
 void setup()
 {
@@ -65,6 +65,9 @@ BLYNK_WRITE(V0)
   if (param.asInt() == 1) {
     pushing_package(1);
     pull_con();
+    delay(10000);
+    slow_con();    
+    Blynk.virtualWrite(V0, 0);
   } else {
     slow_con();
   }
@@ -74,14 +77,22 @@ BLYNK_WRITE(V1)
   if (param.asInt() == 1) {
     pushing_package(2);
     pull_con();
+    delay(10000);
+    slow_con();
+    Blynk.virtualWrite(V1, 0);
   } else {
     slow_con();
   }
 }
 
+BLYNK_WRITE(V2)
+{
+  speed_motor = param.asInt();
+}
+
 void pull_con() {
   set_direction(1);
-  for (spd = 150; spd <= 255; spd += 1) {
+  for (spd = 160; spd <= speed_motor; spd += 1) {
     analogWrite(PIN_ENA, spd);
     analogWrite(PIN_ENB, spd);
     delay(20); //hold speed to protect motor
@@ -90,7 +101,7 @@ void pull_con() {
 
 void slow_con() {
   set_direction(1);
-  for (spd = 255; spd >= 150; spd -= 1) {
+  for (spd = speed_motor; spd >= 160; spd -= 1) {
     analogWrite(PIN_ENA, spd);
     analogWrite(PIN_ENB, spd);
     delay(20);
@@ -108,8 +119,12 @@ void set_direction(int dir) {
 }
 
 void pushing_package(int AorB) {
-  if (AorB == 1) {ServoAPush();}
-  if (AorB == 2) {ServoBPush();}
+  if (AorB == 1) {
+    ServoAPush();
+  }
+  if (AorB == 2) {
+    ServoBPush();
+  }
 }
 
 void ServoAPush() {

@@ -29,7 +29,7 @@ char auth[] = "h5xLM0vLqZL3OBgSC8VMFDnUy73VFoKa";
 // Set password to "" for open networks.
 char ssid[] = "Hotspotify";
 char pass[] = "huhuhuhu";
-int speed_motor = 250;
+int speed_motor = 240;
 
 void setup()
 {
@@ -92,7 +92,7 @@ BLYNK_WRITE(V2)
 
 void pull_con() {
   set_direction(1);
-  for (spd = 160; spd <= speed_motor; spd += 1) {
+  for (spd = 130; spd <= speed_motor; spd += 1) {
     analogWrite(PIN_ENA, spd);
     analogWrite(PIN_ENB, spd);
     delay(20); //hold speed to protect motor
@@ -101,7 +101,7 @@ void pull_con() {
 
 void slow_con() {
   set_direction(1);
-  for (spd = speed_motor; spd >= 160; spd -= 1) {
+  for (spd = speed_motor; spd >= 130; spd -= 1) {
     analogWrite(PIN_ENA, spd);
     analogWrite(PIN_ENB, spd);
     delay(20);

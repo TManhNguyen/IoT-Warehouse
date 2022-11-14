@@ -15,15 +15,14 @@
 // Comment this out to disable prints and save space
 #define BLYNK_PRINT Serial
 
-
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
 char auth[] = BLYNK_AUTH_TOKEN;
 
-                  // Your WiFi credentials.
-                  // Set password to "" for open networks.
-                  char ssid[] = "Hotspotify";
+// Your WiFi credentials.
+// Set password to "" for open networks.
+char ssid[] = "Hotspotify";
 char pass[] = "huhuhuhu";
 
 
